@@ -1,0 +1,35 @@
+using System;
+
+namespace dzkurs
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Card> cards = new List<Card>();
+            
+        }
+
+        
+    }
+
+    class Card
+    {
+        public Card(string suit, int number)
+        {
+            Number = number;
+            Suit = suit;
+        }
+
+        public string Suit { get; private set; }
+        public int Number { get; private set; }
+    }
+
+    class DeckOfCards
+    {
+        List<Card> Cards = new List<Card>();
+        Card card1 = new Card("clubs", 2);
+
+        
+    }
+}
