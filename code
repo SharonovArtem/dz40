@@ -20,136 +20,42 @@ namespace dzkurs
 
             for (int i = 0; i < Convert.ToInt32(userInput); i++)
             {
-                int numberOfCard = random.Next(0, 51);
-                Console.WriteLine(deckOfCards._cards[numberOfCard].Name + ' ' + deckOfCards._cards[numberOfCard].Suit);
-                deckOfCards._cards.Remove(deckOfCards._cards[numberOfCard]);
-                
+                int numberOfCard = random.Next(0, deckOfCards.Cards.Count);
+                Console.WriteLine(deckOfCards.Cards[numberOfCard].Name + ' ' + deckOfCards.Cards[numberOfCard].Suit);
+                deckOfCards.Cards.Remove(deckOfCards.Cards[numberOfCard]);
             }
         }
     }
 
     class Card
     {
+        public string Name { get; }
+        public string Suit { get; }
+
         public Card(string suit, string name)
         {
             Name = name;
-            Suit = suit;           
+            Suit = suit;
         }
-
-        public string Name { get; private set; }
-        public string Suit { get; private set; }
     }
 
     class DeckOfCards
     {
-        public List<Card> _cards = new List<Card>();
-        Card card1 = new Card("clubs", "2");
-        Card card2 = new Card("clubs", "3");
-        Card card3 = new Card("clubs", "4");
-        Card card4 = new Card("clubs", "5");
-        Card card5 = new Card("clubs", "6");
-        Card card6 = new Card("clubs", "7");
-        Card card7 = new Card("clubs", "8");
-        Card card8 = new Card("clubs", "9");
-        Card card9 = new Card("clubs", "10");
-        Card card10 = new Card("clubs", "Jack");
-        Card card11 = new Card("clubs", "Queen");
-        Card card12 = new Card("clubs", "King");
-        Card card13 = new Card("diamonds", "2");
-        Card card14 = new Card("diamonds", "3");
-        Card card15 = new Card("diamonds", "4");
-        Card card16 = new Card("diamonds", "5");
-        Card card17 = new Card("diamonds", "6");
-        Card card18 = new Card("diamonds", "7");
-        Card card19 = new Card("diamonds", "8");
-        Card card20 = new Card("diamonds", "9");
-        Card card21 = new Card("diamonds", "10");
-        Card card22 = new Card("diamonds", "Jack");
-        Card card23 = new Card("diamonds", "Queen");
-        Card card24 = new Card("diamonds", "King");
-        Card card25 = new Card("hearts", "2");
-        Card card26 = new Card("hearts", "3");
-        Card card27 = new Card("hearts", "4");
-        Card card28 = new Card("hearts", "5");
-        Card card29 = new Card("hearts", "6");
-        Card card30 = new Card("hearts", "7");
-        Card card31 = new Card("hearts", "8");
-        Card card32 = new Card("hearts", "9");
-        Card card33 = new Card("hearts", "10");
-        Card card34 = new Card("hearts", "Jack");
-        Card card35 = new Card("hearts", "Queen");
-        Card card36 = new Card("hearts", "King");
-        Card card37 = new Card("spades", "2");
-        Card card38 = new Card("spades", "3");
-        Card card39 = new Card("spades", "4");
-        Card card40 = new Card("spades", "5");
-        Card card41 = new Card("spades", "6");
-        Card card42 = new Card("spades", "7");
-        Card card43 = new Card("spades", "8");
-        Card card44 = new Card("spades", "9");
-        Card card45 = new Card("spades", "10");
-        Card card46 = new Card("spades", "Jack");
-        Card card47 = new Card("spades", "Queen");
-        Card card48 = new Card("spades", "King");
-        Card card49 = new Card("clubs", "Ace");
-        Card card50 = new Card("diamonds", "Ace");
-        Card card51 = new Card("hearts", "Ace");
-        Card card52 = new Card("spades", "Ace");
+        public List<Card> Cards = new List<Card>();
+        private List<String> _suits = new List<String>() { "♠", "♣", "♦", "♥" };
+        private List<String> _names = new List<String>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
 
-        public void CreateCards()
+        public List<Card> CreateCards()
         {
-            _cards.Add(card1);
-            _cards.Add(card2);
-            _cards.Add(card3);
-            _cards.Add(card4);
-            _cards.Add(card5);
-            _cards.Add(card6);
-            _cards.Add(card7);
-            _cards.Add(card8);
-            _cards.Add(card9);
-            _cards.Add(card10);
-            _cards.Add(card11);
-            _cards.Add(card12);
-            _cards.Add(card13);
-            _cards.Add(card14);
-            _cards.Add(card15);
-            _cards.Add(card16);
-            _cards.Add(card17);
-            _cards.Add(card18);
-            _cards.Add(card19);
-            _cards.Add(card20);
-            _cards.Add(card21);
-            _cards.Add(card22);
-            _cards.Add(card23);
-            _cards.Add(card24);
-            _cards.Add(card25);
-            _cards.Add(card26);
-            _cards.Add(card27);
-            _cards.Add(card28);
-            _cards.Add(card29);
-            _cards.Add(card30);
-            _cards.Add(card31);
-            _cards.Add(card32);
-            _cards.Add(card33);
-            _cards.Add(card34);
-            _cards.Add(card35);
-            _cards.Add(card36);
-            _cards.Add(card37);
-            _cards.Add(card38);
-            _cards.Add(card39);
-            _cards.Add(card40);
-            _cards.Add(card41);
-            _cards.Add(card42);
-            _cards.Add(card43);
-            _cards.Add(card44);
-            _cards.Add(card45);
-            _cards.Add(card46);
-            _cards.Add(card47);
-            _cards.Add(card48);
-            _cards.Add(card49);
-            _cards.Add(card50);
-            _cards.Add(card51);
-            _cards.Add(card52);                
+            for (int i = 0; i < _suits.Count; i++)
+            {
+                for (int j = 0; j < _names.Count; j++)
+                {
+                    Cards.Add(new Card(_suits[i], _names[j]) );
+                }
+            }
+
+            return Cards;
         }
     }
 }
