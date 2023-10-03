@@ -7,22 +7,41 @@ namespace dzkurs
     {
         static void Main(string[] args)
         {
+            Player player = new Player();
+            
             Random random = new Random();
-            string userInput;
-            DeckOfCards deckOfCards = new DeckOfCards();
-            deckOfCards.CreateCards();
+            Deck deckOfCards = new Deck();
+            deckOfCards.CreateCards();           
+            bool isWoking = true;
 
-            Console.WriteLine("Сколько карт хотите вытащить?");
-
-            userInput = Console.ReadLine();
-
-            Console.WriteLine("Вы Вытянули:");
-
-            for (int i = 0; i < Convert.ToInt32(userInput); i++)
+            while (isWoking)
             {
-                int numberOfCard = random.Next(0, deckOfCards.Cards.Count);
-                Console.WriteLine(deckOfCards.Cards[numberOfCard].Name + ' ' + deckOfCards.Cards[numberOfCard].Suit);
-                deckOfCards.Cards.Remove(deckOfCards.Cards[numberOfCard]);
+                Console.WriteLine("нажмите на пробел чтобы вытянуть карту");
+                deckOfCards.ShuffleCards();
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+
+                if (key.Key == ConsoleKey.Spacebar && deckOfCards.Cards.Count > 0)
+                {
+                    Console.WriteLine("Вы Вытянули:");
+
+                    player.toPickCard(deckOfCards);
+
+                    Console.WriteLine("Ваши карты:");
+
+                    for (int i = 0; i < player.PickedCards.Count; i++)
+                    {
+                        Console.Write(player.PickedCards[i].Name + player.PickedCards[i].Suit + ", ");
+                    }
+                }
+                else if (key.Key == ConsoleKey.Escape)
+                {
+                    isWoking = false;
+                }
+                else
+                {
+                    Console.WriteLine("Не выходит!");
+                }
             }
         }
     }
@@ -39,9 +58,10 @@ namespace dzkurs
         }
     }
 
-    class DeckOfCards
+    class Deck
     {
-        public List<Card> Cards = new List<Card>();
+        public List<Card> Cards { get; private set; } = new List<Card>();
+        
         private List<String> _suits = new List<String>() { "♠", "♣", "♦", "♥" };
         private List<String> _names = new List<String>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
 
@@ -56,6 +76,34 @@ namespace dzkurs
             }
 
             return Cards;
+        }
+
+        public List<Card> ShuffleCards()
+        {
+            Random random = new Random();
+
+            for (int i = Cards.Count - 1; i >= 1; i--)
+            {
+                int j = random.Next(i + 1);
+                var temp = Cards[j];
+                Cards[j] = Cards[i];
+                Cards[i] = temp;
+            }
+
+            return Cards;
+        }
+    }
+
+    class Player
+    {
+        public List<Card> PickedCards { get; private set; } = new List<Card>();
+
+        public Deck toPickCard(Deck deckOfCards)
+        {
+            Console.WriteLine(deckOfCards.Cards[deckOfCards.Cards.Count - 1].Name + deckOfCards.Cards[deckOfCards.Cards.Count - 1].Suit);
+            PickedCards.Add(deckOfCards.Cards[deckOfCards.Cards.Count - 1]);
+            deckOfCards.Cards.RemoveAt(deckOfCards.Cards.Count - 1);
+            return deckOfCards;
         }
     }
 }
