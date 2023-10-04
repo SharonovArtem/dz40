@@ -8,10 +8,10 @@ namespace dzkurs
         static void Main(string[] args)
         {
             Player player = new Player();
-            
+
             Random random = new Random();
             Deck deckOfCards = new Deck();
-            deckOfCards.CreateCards();           
+            deckOfCards.CreateCards();
             bool isWoking = true;
 
             while (isWoking)
@@ -21,18 +21,13 @@ namespace dzkurs
                 ConsoleKeyInfo key = Console.ReadKey(true);
 
 
-                if (key.Key == ConsoleKey.Spacebar && deckOfCards.Cards.Count > 0)
+                if (key.Key == ConsoleKey.Spacebar)
                 {
                     Console.WriteLine("Вы Вытянули:");
 
                     player.toPickCard(deckOfCards);
 
-                    Console.WriteLine("Ваши карты:");
-
-                    for (int i = 0; i < player.PickedCards.Count; i++)
-                    {
-                        Console.Write(player.PickedCards[i].Name + player.PickedCards[i].Suit + ", ");
-                    }
+                    player.ShowCards(player);
                 }
                 else if (key.Key == ConsoleKey.Escape)
                 {
@@ -48,62 +43,82 @@ namespace dzkurs
 
     class Card
     {
-        public string Name { get; }
-        public string Suit { get; }
-
         public Card(string suit, string name)
         {
             Name = name;
             Suit = suit;
         }
+
+        public string Name { get; }
+        public string Suit { get; }
     }
 
     class Deck
     {
-        public List<Card> Cards { get; private set; } = new List<Card>();
-        
-        private List<String> _suits = new List<String>() { "♠", "♣", "♦", "♥" };
-        private List<String> _names = new List<String>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
+        private List<Card> _сards = new List<Card>();
 
-        public List<Card> CreateCards()
+        List<String> suits = new List<String>() { "♠", "♣", "♦", "♥" };
+        List<String> names = new List<String>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
+
+        public void CreateCards()
         {
-            for (int i = 0; i < _suits.Count; i++)
+            for (int suitNumber = 0; suitNumber < suits.Count; suitNumber++)
             {
-                for (int j = 0; j < _names.Count; j++)
+                for (int nameNumber = 0; nameNumber < names.Count; nameNumber++)
                 {
-                    Cards.Add(new Card(_suits[i], _names[j]) );
+                    _сards.Add(new Card(suits[suitNumber], names[nameNumber]));
                 }
             }
-
-            return Cards;
         }
 
-        public List<Card> ShuffleCards()
+        public void ShuffleCards()
         {
             Random random = new Random();
 
-            for (int i = Cards.Count - 1; i >= 1; i--)
+            for (int i = _сards.Count - 1; i >= 1; i--)
             {
                 int j = random.Next(i + 1);
-                var temp = Cards[j];
-                Cards[j] = Cards[i];
-                Cards[i] = temp;
+                var temp = _сards[j];
+                _сards[j] = _сards[i];
+                _сards[i] = temp;
             }
+        }
 
-            return Cards;
+        public void DropOne(List<Card> cards)
+        {
+            if (_сards.Count > 0)
+            {
+                cards.Add(_сards[_сards.Count - 1]);
+
+                _сards.RemoveAt(_сards.Count - 1);
+            }
+            else
+            {
+                Console.WriteLine("Карты кончились!");
+            }
         }
     }
 
     class Player
     {
-        public List<Card> PickedCards { get; private set; } = new List<Card>();
+        private List<Card> _pickedCards = new List<Card>();
 
-        public Deck toPickCard(Deck deckOfCards)
+        public void toPickCard(Deck deckOfCards)
         {
-            Console.WriteLine(deckOfCards.Cards[deckOfCards.Cards.Count - 1].Name + deckOfCards.Cards[deckOfCards.Cards.Count - 1].Suit);
-            PickedCards.Add(deckOfCards.Cards[deckOfCards.Cards.Count - 1]);
-            deckOfCards.Cards.RemoveAt(deckOfCards.Cards.Count - 1);
-            return deckOfCards;
+            
+            deckOfCards.DropOne(_pickedCards);
+
+            Console.WriteLine(_pickedCards[_pickedCards.Count - 1].Name + _pickedCards[_pickedCards.Count - 1].Suit);
+        }
+
+        public void ShowCards(Player player)
+        {
+            Console.WriteLine("Ваши карты:");
+
+            for (int i = 0; i < _pickedCards.Count; i++)
+            {
+                Console.Write(player._pickedCards[i].Name + player._pickedCards[i].Suit + ", ");
+            }
         }
     }
 }
