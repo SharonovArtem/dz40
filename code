@@ -103,7 +103,7 @@ namespace dzkurs
 
         public void DropOne()
         {
-            Player player = null;
+            Player player = new Player();
 
             Console.WriteLine("Вы Вытянули:");
 
@@ -117,8 +117,6 @@ namespace dzkurs
             {
                 Console.WriteLine("Карты кончились!");
             }
-
-            player.ShowCards();
         }
     }
 
@@ -132,11 +130,13 @@ namespace dzkurs
         {
             deck.DropOne();
 
-            _pickedCards.Add(droppedCards[droppedCards.Count - 1]);
+            _pickedCards.Add(droppedCards[droppedCards.Count]);
 
             droppedCards.RemoveAt(droppedCards.Count);
 
             Console.WriteLine(_pickedCards[_pickedCards.Count - 1].Name + _pickedCards[_pickedCards.Count - 1].Suit);
+
+            ShowCards();
         }
 
         public void ShowCards()
