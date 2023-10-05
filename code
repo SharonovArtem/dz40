@@ -8,7 +8,7 @@ namespace dzkurs
         static void Main(string[] args)
         {
             Player player = new Player();
-
+            Card card = new Card(null, null);
             Random random = new Random();
             Deck deckOfCards = new Deck();
             deckOfCards.CreateCards();
@@ -25,9 +25,9 @@ namespace dzkurs
                 {
                     Console.WriteLine("Вы Вытянули:");
 
-                    player.toPickCard(deckOfCards);
+                    player.toPickCard(card);
 
-                    player.ShowCards(player);
+                    player.ShowCards();
                 }
                 else if (key.Key == ConsoleKey.Escape)
                 {
@@ -51,22 +51,44 @@ namespace dzkurs
 
         public string Name { get; }
         public string Suit { get; }
+
+        private List<String> _suits = new List<String>() { "♠", "♣", "♦", "♥" };
+        private List<String> _names = new List<String>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
+
+        public void ShowSuits(List<String> suits)
+        {
+            for (int i = 0; i < _suits.Count; i++)
+            {
+                suits.Add(_suits[i]);
+            }
+        }
+
+        public void ShowNames(List<String> names)
+        {
+            for (int i = 0; i < _names.Count; i++)
+            {
+                names.Add(_names[i]);
+            }
+        }
     }
 
     class Deck
     {
+        private Card _card = new Card(null, null);
         private List<Card> _сards = new List<Card>();
-
-        List<String> suits = new List<String>() { "♠", "♣", "♦", "♥" };
-        List<String> names = new List<String>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
+        List<String> suits = new List<String>();
+        List<String> names = new List<String>();
 
         public void CreateCards()
         {
-            for (int suitNumber = 0; suitNumber < suits.Count; suitNumber++)
+            _card.ShowSuits(suits);
+            _card.ShowNames(names);
+
+            for (int i = 0; i < suits.Count; i++)
             {
                 for (int nameNumber = 0; nameNumber < names.Count; nameNumber++)
                 {
-                    _сards.Add(new Card(suits[suitNumber], names[nameNumber]));
+                    _сards.Add(new Card(suits[i], names[nameNumber]));
                 }
             }
         }
@@ -77,18 +99,20 @@ namespace dzkurs
 
             for (int i = _сards.Count - 1; i >= 1; i--)
             {
-                int j = random.Next(i + 1);
-                var temp = _сards[j];
-                _сards[j] = _сards[i];
+                int randomNumber = random.Next(_сards.Count);
+                var temp = _сards[randomNumber];
+                _сards[randomNumber] = _сards[i];
                 _сards[i] = temp;
             }
         }
 
-        public void DropOne(List<Card> cards)
+        public void DropOne()
         {
+            Player player = null;
+
             if (_сards.Count > 0)
             {
-                cards.Add(_сards[_сards.Count - 1]);
+                player.droppedCards.Add(_сards[_сards.Count - 1]);
 
                 _сards.RemoveAt(_сards.Count - 1);
             }
@@ -101,23 +125,28 @@ namespace dzkurs
 
     class Player
     {
+        Deck deck = new Deck();
         private List<Card> _pickedCards = new List<Card>();
+        public List<Card> droppedCards { get; private set; } = new List<Card>();
 
-        public void toPickCard(Deck deckOfCards)
+        public void toPickCard(Card card)
         {
-            
-            deckOfCards.DropOne(_pickedCards);
+            deck.DropOne();
+
+            _pickedCards.Add(droppedCards[droppedCards.Count - 1]);
+
+            droppedCards.RemoveAt(droppedCards.Count);
 
             Console.WriteLine(_pickedCards[_pickedCards.Count - 1].Name + _pickedCards[_pickedCards.Count - 1].Suit);
         }
 
-        public void ShowCards(Player player)
+        public void ShowCards()
         {
             Console.WriteLine("Ваши карты:");
 
             for (int i = 0; i < _pickedCards.Count; i++)
             {
-                Console.Write(player._pickedCards[i].Name + player._pickedCards[i].Suit + ", ");
+                Console.Write(_pickedCards[i].Name + _pickedCards[i].Suit + ", ");
             }
         }
     }
