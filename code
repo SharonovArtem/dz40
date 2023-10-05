@@ -20,14 +20,9 @@ namespace dzkurs
                 deckOfCards.ShuffleCards();
                 ConsoleKeyInfo key = Console.ReadKey(true);
 
-
                 if (key.Key == ConsoleKey.Spacebar)
                 {
-                    Console.WriteLine("Вы Вытянули:");
-
                     player.toPickCard(card);
-
-                    player.ShowCards();
                 }
                 else if (key.Key == ConsoleKey.Escape)
                 {
@@ -110,6 +105,8 @@ namespace dzkurs
         {
             Player player = null;
 
+            Console.WriteLine("Вы Вытянули:");
+
             if (_сards.Count > 0)
             {
                 player.droppedCards.Add(_сards[_сards.Count - 1]);
@@ -120,6 +117,8 @@ namespace dzkurs
             {
                 Console.WriteLine("Карты кончились!");
             }
+
+            player.ShowCards();
         }
     }
 
