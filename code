@@ -8,7 +8,6 @@ namespace dzkurs
         static void Main(string[] args)
         {
             Player player = new Player();
-            Card card = new Card(null, null);
             Random random = new Random();
             Deck deckOfCards = new Deck();
             deckOfCards.CreateCards();
@@ -22,7 +21,7 @@ namespace dzkurs
 
                 if (key.Key == ConsoleKey.Spacebar)
                 {
-                    player.toPickCard(card);
+                    player.toPickCard();
                 }
                 else if (key.Key == ConsoleKey.Escape)
                 {
@@ -101,15 +100,13 @@ namespace dzkurs
             }
         }
 
-        public void DropOne()
+        public void DropOne(Card droppedCard)
         {
-            Player player = new Player();
-
             Console.WriteLine("Вы Вытянули:");
 
             if (_сards.Count > 0)
             {
-                player.droppedCards.Add(_сards[_сards.Count - 1]);
+                droppedCard = _сards[_сards.Count - 1];
 
                 _сards.RemoveAt(_сards.Count - 1);
             }
@@ -122,17 +119,17 @@ namespace dzkurs
 
     class Player
     {
-        Deck deck = new Deck();
         private List<Card> _pickedCards = new List<Card>();
-        public List<Card> droppedCards { get; private set; } = new List<Card>();
 
-        public void toPickCard(Card card)
+        public void toPickCard()
         {
-            deck.DropOne();
+            Card droppedCard = new Card(null, null);
 
-            _pickedCards.Add(droppedCards[droppedCards.Count]);
+            deck.DropOne(droppedCard);
 
-            droppedCards.RemoveAt(droppedCards.Count);
+            _pickedCards.Add(droppedCard);
+
+            droppedCard = null;
 
             Console.WriteLine(_pickedCards[_pickedCards.Count - 1].Name + _pickedCards[_pickedCards.Count - 1].Suit);
 
