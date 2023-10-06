@@ -117,10 +117,6 @@ namespace dzkurs
 
                 _сards.RemoveAt(_сards.Count - 1);
             }
-            else
-            {
-                Console.WriteLine("Карты кончились!");
-            }
             
             return droppedCard;
         }
@@ -138,6 +134,11 @@ namespace dzkurs
             }
         }
 
+        public void TakeCard(List<Card> cards)
+        {
+            _pickedCards = cards;
+        }
+
         public void ShowCards(List<Card> cards)
         {
             Console.WriteLine("Ваши карты:");
@@ -153,22 +154,35 @@ namespace dzkurs
     {
         public void GetCard( Player player, Deck deck)
         {
-            
             Card droppedCard = new Card(null, null);
             List<Card> pickedCards = new List<Card>();
             List<Card> cardsInDeck = new List<Card>();
+
+            deck.ShuffleCards();
+
             player.ShowCardsToTable(pickedCards);
+
             deck.ShowCardsToTable(cardsInDeck);
 
-            Console.WriteLine("Вы Вытянули:");
 
-            droppedCard = deck.DropOne(droppedCard);
+            if (cardsInDeck.Count > 0)
+            {
+                Console.WriteLine("Вы Вытянули:");
 
-            pickedCards.Add(droppedCard);
+                droppedCard = deck.DropOne(droppedCard);
 
-            Console.WriteLine(pickedCards[pickedCards.Count - 1].Name + pickedCards[pickedCards.Count - 1].Suit);
+                player.TakeCard(pickedCards);
 
-            player.ShowCards(pickedCards);
+                pickedCards.Add(droppedCard);
+
+                Console.WriteLine(pickedCards[pickedCards.Count - 1].Name + pickedCards[pickedCards.Count - 1].Suit);
+
+                player.ShowCards(pickedCards);
+            }
+            else
+            {
+                Console.WriteLine("Карты кончились!");
+            }
         }
     }
 }
