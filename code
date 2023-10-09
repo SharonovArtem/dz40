@@ -46,43 +46,25 @@ namespace dzkurs
         public string Name { get; }
         public string Suit { get; }
 
-        private List<String> _suits = new List<String>() { "♠", "♣", "♦", "♥" };
-        private List<String> _names = new List<String>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
+        
 
-        public void ShowSuits(List<String> suits)
-        {
-            for (int i = 0; i < _suits.Count; i++)
-            {
-                suits.Add(_suits[i]);
-            }
-        }
-
-        public void ShowNames(List<String> names)
-        {
-            for (int i = 0; i < _names.Count; i++)
-            {
-                names.Add(_names[i]);
-            }
-        }
+        
     }
 
     class Deck
     {
+        private List<String> _suits = new List<String>() { "♠", "♣", "♦", "♥" };
+        private List<String> _names = new List<String>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
         private Card _card = new Card(null, null);
-        private List<Card> _сards = new List<Card>();
-        List<String> suits = new List<String>();
-        List<String> names = new List<String>();
+        private List<Card> _сards = new List<Card>();      
 
         public void CreateCards()
         {
-            _card.ShowSuits(suits);
-            _card.ShowNames(names);
-
-            for (int i = 0; i < suits.Count; i++)
+            for (int i = 0; i < _suits.Count; i++)
             {
-                for (int nameNumber = 0; nameNumber < names.Count; nameNumber++)
+                for (int nameNumber = 0; nameNumber < _names.Count; nameNumber++)
                 {
-                    _сards.Add(new Card(suits[i], names[nameNumber]));
+                    _сards.Add(new Card(_suits[i], _names[nameNumber]));
                 }
             }
         }
@@ -108,16 +90,16 @@ namespace dzkurs
             }
         }
 
-        public Card DropOne(Card droppedCard)
+        public Card DropOne()
         {
-
+            Card droppedCard = null;
             if (_сards.Count > 0)
             {
                 droppedCard = _сards[_сards.Count - 1];
 
                 _сards.RemoveAt(_сards.Count - 1);
             }
-            
+
             return droppedCard;
         }
     }
@@ -126,7 +108,7 @@ namespace dzkurs
     {
         private List<Card> _pickedCards = new List<Card>();
 
-        public void ShowCardsToTable(List<Card> cards)
+        public void GiveAccessForCardsToTable(List<Card> cards)
         {
             for (int i = 0; i < _pickedCards.Count; i++)
             {
@@ -134,7 +116,7 @@ namespace dzkurs
             }
         }
 
-        public void TakeCard(List<Card> cards)
+        public void TakeCards(List<Card> cards)
         {
             _pickedCards = cards;
         }
@@ -152,7 +134,7 @@ namespace dzkurs
 
     class Table
     {
-        public void GetCard( Player player, Deck deck)
+        public void GetCard(Player player, Deck deck)
         {
             Card droppedCard = new Card(null, null);
             List<Card> pickedCards = new List<Card>();
@@ -160,18 +142,17 @@ namespace dzkurs
 
             deck.ShuffleCards();
 
-            player.ShowCardsToTable(pickedCards);
+            player.GiveAccessForCardsToTable(pickedCards);
 
             deck.ShowCardsToTable(cardsInDeck);
-
 
             if (cardsInDeck.Count > 0)
             {
                 Console.WriteLine("Вы Вытянули:");
 
-                droppedCard = deck.DropOne(droppedCard);
+                droppedCard = deck.DropOne();
 
-                player.TakeCard(pickedCards);
+                player.TakeCards(pickedCards);
 
                 pickedCards.Add(droppedCard);
 
