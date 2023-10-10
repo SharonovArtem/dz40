@@ -7,12 +7,11 @@ namespace dzkurs
     {
         static void Main(string[] args)
         {
-            Deck deckOfCards = new Deck();
+            List<Card> cards = new List<Card>();
+            Deck deckOfCards = new Deck(cards);
             Player player = new Player();
-            Random random = new Random();
             Table table = new Table();
             bool isWoking = true;
-            deckOfCards.CreateCards();
 
             while (isWoking)
             {
@@ -21,7 +20,7 @@ namespace dzkurs
 
                 if (key.Key == ConsoleKey.Spacebar)
                 {
-                    table.GetCard(player, deckOfCards);
+                    table.TransferCard(player, deckOfCards);
                 }
                 else if (key.Key == ConsoleKey.Escape)
                 {
@@ -49,6 +48,14 @@ namespace dzkurs
 
     class Deck
     {
+        public Deck(List<Card> cards)
+        {
+            _сards = cards;
+
+            CreateCards();
+            ShuffleCards();
+        }
+
         private List<Card> _сards = new List<Card>();
 
         public void CreateCards()
@@ -58,9 +65,14 @@ namespace dzkurs
 
             for (int i = 0; i < suits.Count; i++)
             {
-                for (int nameNumber = 0; nameNumber < names.Count; nameNumber++)
+                for (int j = 0; j < names.Count; j++)
                 {
-                    _сards.Add(new Card(suits[i], names[nameNumber]));
+                    Card card = new Card(suits[i], names[j]);
+
+                    if (card != null)
+                    {
+                        _сards.Add(card);
+                    }
                 }
             }
         }
@@ -69,7 +81,7 @@ namespace dzkurs
         {
             Random random = new Random();
 
-            for (int i = _сards.Count - 1; i >= 1; i--)
+            for (int i = _сards.Count - 1; i >= 0; i--)
             {
                 int randomNumber = random.Next(_сards.Count);
                 var temp = _сards[randomNumber];
@@ -81,11 +93,12 @@ namespace dzkurs
         public Card DropOne()
         {
             Card droppedCard = null;
+
             if (_сards.Count > 0)
             {
                 droppedCard = _сards[_сards.Count - 1];
 
-                _сards.RemoveAt(_сards.Count - 1);
+                _сards.Remove(droppedCard);
             }
             else
             {
@@ -118,7 +131,7 @@ namespace dzkurs
 
     class Table
     {
-        public void GetCard(Player player, Deck deck)
+        public void TransferCard(Player player, Deck deck)
         {
             Console.WriteLine("Вы Вытянули:");
 
