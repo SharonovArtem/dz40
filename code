@@ -8,7 +8,7 @@ namespace ConsoleApp9
         static void Main(string[] args)
         {
             List<Card> cards = new List<Card>();
-            Deck deckOfCards = new Deck(cards);
+            Deck deckOfCards = new Deck();
             Player player = new Player();
             Table table = new Table();
             bool isWoking = true;
@@ -16,13 +16,13 @@ namespace ConsoleApp9
             while (isWoking)
             {
                 Console.WriteLine("нажмите на пробел чтобы вытянуть карту");
-                ConsoleKeyInfo key = Console.ReadKey(true);
+                ConsoleKeyInfo keyToTakeCard = Console.ReadKey(true);
 
-                if (key.Key == ConsoleKey.Spacebar)
+                if (keyToTakeCard.Key == ConsoleKey.Spacebar)
                 {
                     table.TransferCard(player, deckOfCards);
                 }
-                else if (key.Key == ConsoleKey.Escape)
+                else if (keyToTakeCard.Key == ConsoleKey.Escape)
                 {
                     isWoking = false;
                 }
@@ -50,7 +50,7 @@ namespace ConsoleApp9
     {
         private List<Card> _сards = new List<Card>();
 
-        public Deck(List<Card> cards)
+        public Deck()
         {
             CreateCards();
             ShuffleCards();
@@ -60,7 +60,7 @@ namespace ConsoleApp9
         {
             Card droppedCard = null;
 
-            if (_сards.Count > 0 || _сards[_сards.Count - 1] != null)
+            if (_сards.Count > 0)
             {
                 droppedCard = _сards[_сards.Count - 1];
 
@@ -76,20 +76,14 @@ namespace ConsoleApp9
 
         private void CreateCards()
         {
-            List<String> suits = new List<String>() { "♠", "♣", "♦", "♥" };
-            List<String> names = new List<String>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
+            string[]  suits = new string[] { "♠", "♣", "♦", "♥" };
+            string[] names = new string[] { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
 
-            for (int i = 0; i < suits.Count; i++)
+            for (int i = 0; i < suits.Length; i++)
             {
-                for (int j = 0; j < names.Count; j++)
+                for (int j = 0; j < names.Length; j++)
                 {
                     Card card = new Card(suits[i], names[j]);
-
-                    if (card == null)
-                    {
-                        Console.WriteLine("Карта пустая");
-                        return;
-                    }
 
                     _сards.Add(card);
                 }
@@ -138,7 +132,7 @@ namespace ConsoleApp9
 
             Card card = deck.DropOneCard();
 
-            if (deck.DropOneCard() != null)
+            if (card != null)
             {
                 player.TakeCard(card);
             }
