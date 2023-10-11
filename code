@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace dzkurs
+namespace ConsoleApp9
 {
     internal class Program
     {
@@ -48,17 +51,15 @@ namespace dzkurs
 
     class Deck
     {
-        public Deck(List<Card> cards)
-        {
-            _сards = cards;
-
-            CreateCards();
-            ShuffleCards();
-        }
-
         private List<Card> _сards = new List<Card>();
 
-        public void CreateCards()
+        public Deck(List<Card> cards)
+        {
+            _createCards();
+            _shuffleCards();
+        }
+
+        private void _createCards()
         {
             List<String> suits = new List<String>() { "♠", "♣", "♦", "♥" };
             List<String> names = new List<String>() { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
@@ -69,15 +70,18 @@ namespace dzkurs
                 {
                     Card card = new Card(suits[i], names[j]);
 
-                    if (card != null)
+                    if (card == null)
                     {
-                        _сards.Add(card);
+                        Console.WriteLine("Карта пустая");
+                        return;
                     }
+
+                    _сards.Add(card);
                 }
             }
         }
 
-        public void ShuffleCards()
+        private void _shuffleCards()
         {
             Random random = new Random();
 
@@ -90,7 +94,7 @@ namespace dzkurs
             }
         }
 
-        public Card DropOne()
+        public Card DropOneCard()
         {
             Card droppedCard = null;
 
@@ -135,7 +139,7 @@ namespace dzkurs
         {
             Console.WriteLine("Вы Вытянули:");
 
-            Card card = deck.DropOne();
+            Card card = deck.DropOneCard();
             player.TakeCard(card);
 
             Console.WriteLine(card.Name + card.Suit);
