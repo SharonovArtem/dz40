@@ -53,14 +53,14 @@ namespace ConsoleApp9
         public Deck(List<Card> cards)
         {
             CreateCards();
-            _shuffleCards();
+            ShuffleCards();
         }
 
         public Card DropOneCard()
         {
             Card droppedCard = null;
 
-            if (_сards.Count > 0)
+            if (_сards.Count > 0 || _сards[_сards.Count - 1] != null)
             {
                 droppedCard = _сards[_сards.Count - 1];
 
@@ -96,7 +96,7 @@ namespace ConsoleApp9
             }
         }
 
-        private void _shuffleCards()
+        private void ShuffleCards()
         {
             Random random = new Random();
 
@@ -137,13 +137,11 @@ namespace ConsoleApp9
             Console.WriteLine("Вы Вытянули:");
 
             Card card = deck.DropOneCard();
-            
-            if (deck.DropOneCard() == null)
-            {
-                Console.WriteLine("У нас нет столько карт:(");
-            }
 
-            player.TakeCard(card);
+            if (deck.DropOneCard() != null)
+            {
+                player.TakeCard(card);
+            }
 
             Console.WriteLine(card.Name + card.Suit);
 
